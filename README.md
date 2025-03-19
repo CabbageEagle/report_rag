@@ -33,6 +33,15 @@ pip install -e . -r requirements.txt
 
 Rename `env` to `.env` and add your API keys.
 
+## Test Dataset
+
+The repository includes a small test set with 5 annual reports and 5 questions. This allows you to try out the system without dealing with the full competition dataset.
+
+You have two options to get started:
+
+1. Run the pipeline from scratch using the provided PDFs and questions
+2. Use the pre-processed data by unzipping two files in the `test_set` folder - these contain intermediate results from all pipeline stages. This lets you jump straight to any part of the pipeline (like answering questions) without running the earlier steps.
+
 ## Usage
 
 You can run any part of pipeline by uncommenting the method you want to run in `src/pipeline.py` and executing:
