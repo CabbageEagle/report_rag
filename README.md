@@ -35,12 +35,20 @@ Rename `env` to `.env` and add your API keys.
 
 ## Test Dataset
 
-The repository includes a small test set with 5 annual reports and 5 questions. This allows you to try out the system without dealing with the full competition dataset.
+The repository includes two datasets:
 
-You have two options to get started:
+1. A small test set (in `data/test_set/`) with 5 annual reports and questions
+2. The full ERC2 competition dataset (in `data/erc2_set/`) with all competition questions and reports
 
-1. Run the pipeline from scratch using the provided PDFs and questions
-2. Use the pre-processed data by unzipping two files in the `test_set` folder - these contain intermediate results from all pipeline stages. This lets you jump straight to any part of the pipeline (like answering questions) without running the earlier steps.
+Each dataset directory contains its own README with specific setup instructions and available files. You can use either dataset to:
+
+- Study example questions, reports, and system outputs
+- Run the pipeline from scratch using provided PDFs
+- Use pre-processed data to skip directly to specific pipeline stages
+
+See the respective README files for detailed dataset contents and setup instructions:
+- `data/test_set/README.md` - For the small test dataset
+- `data/erc2_set/README.md` - For the full competition dataset
 
 ## Usage
 

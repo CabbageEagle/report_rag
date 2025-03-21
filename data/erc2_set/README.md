@@ -1,28 +1,34 @@
-# ERC2 Dataset Setup
+# ERC2 Dataset
 
-This directory contains the full RAG Challenge dataset with questions and company reports.
-You can study the questions and my winning system's answers here.
+This directory contains the full RAG Challenge dataset with questions and corresponding company reports.
+You can use this to study example questions, reports, and system outputs.
 
-If you want to try out the system by yourself, you must download the actual report data files.
+## Contents
+- `questions.json`: Contains the competition questions
+- `subset.csv`: Metadata about the test documents
+- `subset.json`: Same metadata, but in JSON format
+- `answers_1st_place_o3-mini.json`: Sample answers from the winning system using OpenAI's model
+- `answers_1st_place_llama_70b.json`: Sample answers using Llama 70B model
 
-## Downloads
+## Running the System
 
-Choose and download only the files you need:
+To run the system on this dataset:
 
-### Required for Question Answering
-- `databases`: [google drive link](https://drive.google.com/file/d/1mp-hYhMAit4rdi7RURuIsM33zbXq1nQJ/view?usp=sharing)
-  - Contains all the processed data needed for running question answering pipeline
+1. Download and unpack the required files in this directory:
 
-### Optional Files
-- `pdf_reports`: [google drive link](https://drive.google.com/file/d/1MvcN_-KpI-9nS4hDFAcPxFU2lRmwMP7M/view?usp=sharing)
-  - Needed if you want to run the PDF parsing pipeline from scratch
-  - Or if you want to analyze the original documents
+   ### Required for Question Answering
+   - `databases` ([google drive](https://drive.google.com/file/d/1mp-hYhMAit4rdi7RURuIsM33zbXq1nQJ/view?usp=sharing))
+     - Contains all the processed data needed for running question answering pipeline
 
-- `debug_data`: [google drive link](https://drive.google.com/file/d/13RT456tZVTAwPIsy8OndZ1EWASNCdfe3/view?usp=sharing)
-  - Needed if you want to:
-    - Debug specific pipeline stages
-    - Run individual preprocessing steps
-    - Study the system's intermediate outputs
+   ### Optional Files
+   - `pdf_reports` ([google drive](https://drive.google.com/file/d/1MvcN_-KpI-9nS4hDFAcPxFU2lRmwMP7M/view?usp=sharing))
+     - Needed if you want to run the PDF parsing pipeline from scratch
+     - Or if you want to analyze the original documents
 
+   - `debug_data` ([google drive](https://drive.google.com/file/d/13RT456tZVTAwPIsy8OndZ1EWASNCdfe3/view?usp=sharing))
+     - Needed if you want to:
+       - Debug specific pipeline stages
+       - Run individual preprocessing steps
+       - Study the system's intermediate outputs
 
-Simply download your chosen files and unpack them into the directory where this README file is located.
+2. Follow the setup and usage instructions in the main README.md at the root of this repository
