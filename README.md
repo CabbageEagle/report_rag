@@ -1,5 +1,9 @@
 # RAG Challenge Winner Solution
 
+**Read more about this project:**
+- Russian: https://habr.com/ru/articles/893356/
+- English: https://abdullin.com/ilya/how-to-build-best-rag/
+
 This repository contains the winning solution for both prize nominations in the RAG Challenge competition. The system achieved state-of-the-art results in answering questions about company annual reports using a combination of:
 
 - Custom PDF parsing with Docling
