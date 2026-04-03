@@ -23,8 +23,8 @@ class QuestionsProcessor:
         llm_reranking_sample_size: int = 20,
         top_n_retrieval: int = 10,
         parallel_requests: int = 10,
-        api_provider: str = "openai",
-        answering_model: str = "gpt-4o-2024-08-06",
+        api_provider: str = "gemini",
+        answering_model: str = "gemini-2.0-flash-001",
         full_context: bool = False
     ):
         self.questions = self._load_questions(questions_file_path)

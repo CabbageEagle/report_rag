@@ -1,7 +1,6 @@
 import json
 import logging
 from typing import List, Tuple, Dict, Union
-from rank_bm25 import BM25Okapi
 import pickle
 from pathlib import Path
 import faiss
@@ -9,6 +8,8 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 import numpy as np
+
+from src.index_metadata import INDEX_VERSION, get_index_metadata_path
 from src.reranking import LLMReranker
 
 _log = logging.getLogger(__name__)
@@ -33,6 +34,7 @@ class BM25Retriever:
             
         # Load corresponding BM25 index
         bm25_path = self.bm25_db_dir / f"{document['metainfo']['sha1_name']}.pkl"
+        self._warn_on_legacy_or_mismatched_metadata(bm25_path)
         with open(bm25_path, 'rb') as f:
             bm25_index = pickle.load(f)
             
@@ -74,6 +76,27 @@ class BM25Retriever:
                 retrieval_results.append(result)
         
         return retrieval_results
+
+    def _warn_on_legacy_or_mismatched_metadata(self, index_path: Path):
+        metadata_path = get_index_metadata_path(index_path)
+        if not metadata_path.exists():
+            _log.warning("BM25 metadata file is missing for %s; treating it as a legacy index.", index_path.name)
+            return
+
+        try:
+            with open(metadata_path, "r", encoding="utf-8") as f:
+                metadata = json.load(f)
+        except Exception as err:
+            _log.warning("Could not read BM25 metadata for %s: %s", index_path.name, err)
+            return
+
+        if metadata.get("index_version") != INDEX_VERSION:
+            _log.warning(
+                "BM25 index %s has version %s, expected %s.",
+                index_path.name,
+                metadata.get("index_version"),
+                INDEX_VERSION,
+            )
 
 
 
@@ -131,6 +154,8 @@ class VectorRetriever:
             except Exception as e:
                 _log.error(f"Error reading vector DB for {document_path.name}: {e}")
                 continue
+
+            self._warn_on_legacy_or_mismatched_metadata(vector_db_files[stem])
                 
             report = {
                 "name": stem,
@@ -139,6 +164,27 @@ class VectorRetriever:
             }
             all_dbs.append(report)
         return all_dbs
+
+    def _warn_on_legacy_or_mismatched_metadata(self, index_path: Path):
+        metadata_path = get_index_metadata_path(index_path)
+        if not metadata_path.exists():
+            _log.warning("Vector index metadata file is missing for %s; treating it as a legacy index.", index_path.name)
+            return
+
+        try:
+            with open(metadata_path, "r", encoding="utf-8") as f:
+                metadata = json.load(f)
+        except Exception as err:
+            _log.warning("Could not read vector index metadata for %s: %s", index_path.name, err)
+            return
+
+        if metadata.get("index_version") != INDEX_VERSION:
+            _log.warning(
+                "Vector index %s has version %s, expected %s.",
+                index_path.name,
+                metadata.get("index_version"),
+                INDEX_VERSION,
+            )
 
     @staticmethod
     def get_strings_cosine_similarity(str1, str2):

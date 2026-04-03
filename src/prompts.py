@@ -426,6 +426,65 @@ Here is the LLM response that not following the schema and needs to be properly 
 """
 
 
+class ContextualizedChunkPrompt:
+    instruction = """
+You generate a short locator description for a chunk from an annual report.
+
+The description will be prepended to the original chunk only for retrieval indexing.
+Write exactly one concise sentence that helps a retriever understand what this chunk is about
+and where it fits in the report.
+
+Rules:
+- Keep it short and specific.
+- Focus on topic, section role, metric scope, or table purpose.
+- Use the provided company, year, page, heading, and table signals when they are available.
+- For serialized tables, prefer mentioning the table topic, year range, units, and primary metrics when the inputs provide them.
+- Do not quote or copy long spans from the chunk.
+- Do not invent missing details.
+- Do not mention that you are an AI or that this is a prompt response.
+- Do not add bullet points, labels, or markdown.
+"""
+
+    user_prompt = """
+Company name: {company_name}
+Report year: {report_year}
+Chunk type: {chunk_type}
+Page: {page}
+Nearest heading: {nearest_heading}
+Table topic: {table_topic}
+Year range: {year_range}
+Unit: {unit}
+Primary metrics: {primary_metrics}
+
+Page text:
+\"\"\"
+{page_text}
+\"\"\"
+
+Chunk text:
+\"\"\"
+{chunk_text}
+\"\"\"
+"""
+
+    class AnswerSchema(BaseModel):
+        contextual_description: str = Field(
+            description="One short sentence describing the chunk's topic and role in the report."
+        )
+
+    pydantic_schema = re.sub(r"^ {4}", "", inspect.getsource(AnswerSchema), flags=re.MULTILINE)
+
+    example = r"""
+Example output:
+{
+  "contextual_description": "This chunk summarizes the company's 2023 liquidity position and short-term financing sources."
+}
+"""
+
+    system_prompt = build_system_prompt(instruction, example)
+    system_prompt_with_schema = build_system_prompt(instruction, example, pydantic_schema)
+
+
 
 
 class RerankingPrompt:

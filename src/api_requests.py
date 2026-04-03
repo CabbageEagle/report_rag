@@ -20,7 +20,7 @@ from tenacity import retry, stop_after_attempt, wait_fixed
 class BaseOpenaiProcessor:
     def __init__(self):
         self.llm = self.set_up_llm()
-        self.default_model = 'gpt-4o-2024-08-06'
+        self.default_model = 'deepseek-v3.2-exp'
         # self.default_model = 'gpt-4o-mini-2024-07-18',
 
     def set_up_llm(self):
