@@ -14,14 +14,20 @@ class QuestionsProcessor:
     def __init__(
         self,
         vector_db_dir: Union[str, Path] = './vector_dbs',
+        bm25_db_dir: Optional[Union[str, Path]] = None,
         documents_dir: Union[str, Path] = './documents',
         questions_file_path: Optional[Union[str, Path]] = None,
         new_challenge_pipeline: bool = False,
         subset_path: Optional[Union[str, Path]] = None,
         parent_document_retrieval: bool = False,
+        use_bm25_db: bool = False,
         llm_reranking: bool = False,
         llm_reranking_sample_size: int = 20,
         top_n_retrieval: int = 10,
+        dense_top_k: int = 12,
+        bm25_top_k: int = 12,
+        hybrid_fusion_top_k: int = 20,
+        rrf_k: int = 60,
         parallel_requests: int = 10,
         api_provider: str = "gemini",
         answering_model: str = "gemini-2.0-flash-001",
@@ -30,13 +36,19 @@ class QuestionsProcessor:
         self.questions = self._load_questions(questions_file_path)
         self.documents_dir = Path(documents_dir)
         self.vector_db_dir = Path(vector_db_dir)
+        self.bm25_db_dir = Path(bm25_db_dir) if bm25_db_dir else None
         self.subset_path = Path(subset_path) if subset_path else None
         
         self.new_challenge_pipeline = new_challenge_pipeline
         self.return_parent_pages = parent_document_retrieval
+        self.use_bm25_db = use_bm25_db
         self.llm_reranking = llm_reranking
         self.llm_reranking_sample_size = llm_reranking_sample_size
         self.top_n_retrieval = top_n_retrieval
+        self.dense_top_k = dense_top_k
+        self.bm25_top_k = bm25_top_k
+        self.hybrid_fusion_top_k = hybrid_fusion_top_k
+        self.rrf_k = rrf_k
         self.answering_model = answering_model
         self.parallel_requests = parallel_requests
         self.api_provider = api_provider
@@ -119,10 +131,14 @@ class QuestionsProcessor:
         return validated_pages
 
     def get_answer_for_company(self, company_name: str, question: str, schema: str) -> dict:
+        use_hybrid_retrieval = self.use_bm25_db or self.llm_reranking
 
-        if self.llm_reranking:
+        if use_hybrid_retrieval:
+            if self.bm25_db_dir is None:
+                raise ValueError("bm25_db_dir is required when hybrid retrieval is enabled.")
             retriever = HybridRetriever(
                 vector_db_dir=self.vector_db_dir,
+                bm25_db_dir=self.bm25_db_dir,
                 documents_dir=self.documents_dir
             )
         else:
@@ -132,12 +148,27 @@ class QuestionsProcessor:
             )
 
         if self.full_context:
-            retrieval_results = retriever.retrieve_all(company_name)
-        else:           
+            retrieval_results = VectorRetriever(
+                vector_db_dir=self.vector_db_dir,
+                documents_dir=self.documents_dir
+            ).retrieve_all(company_name)
+        elif use_hybrid_retrieval:
             retrieval_results = retriever.retrieve_by_company_name(
                 company_name=company_name,
                 query=question,
+                dense_top_k=self.dense_top_k,
+                bm25_top_k=self.bm25_top_k,
+                fusion_top_k=self.hybrid_fusion_top_k,
+                rrf_k=self.rrf_k,
+                top_n=self.top_n_retrieval,
+                return_parent_pages=self.return_parent_pages,
+                apply_llm_reranking=self.llm_reranking,
                 llm_reranking_sample_size=self.llm_reranking_sample_size,
+            )
+        else:
+            retrieval_results = retriever.retrieve_by_company_name(
+                company_name=company_name,
+                query=question,
                 top_n=self.top_n_retrieval,
                 return_parent_pages=self.return_parent_pages
             )

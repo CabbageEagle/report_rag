@@ -51,6 +51,10 @@ class RunConfig:
     llm_reranking: bool = False
     llm_reranking_sample_size: int = 30
     top_n_retrieval: int = 10
+    dense_top_k: int = 12
+    bm25_top_k: int = 12
+    hybrid_fusion_top_k: int = 20
+    rrf_k: int = 60
     parallel_requests: int = 10
     team_email: str = "79250515615@yandex.com"
     submission_name: str = "Ilia_Ris vDB + SO CoT"
@@ -254,14 +258,20 @@ class Pipeline:
     def process_questions(self):
         processor = QuestionsProcessor(
             vector_db_dir=self.paths.vector_db_dir,
+            bm25_db_dir=self.paths.bm25_db_path,
             documents_dir=self.paths.documents_dir,
             questions_file_path=self.paths.questions_file_path,
             new_challenge_pipeline=True,
             subset_path=self.paths.subset_path,
             parent_document_retrieval=self.run_config.parent_document_retrieval,
+            use_bm25_db=self.run_config.use_bm25_db,
             llm_reranking=self.run_config.llm_reranking,
             llm_reranking_sample_size=self.run_config.llm_reranking_sample_size,
             top_n_retrieval=self.run_config.top_n_retrieval,
+            dense_top_k=self.run_config.dense_top_k,
+            bm25_top_k=self.run_config.bm25_top_k,
+            hybrid_fusion_top_k=self.run_config.hybrid_fusion_top_k,
+            rrf_k=self.run_config.rrf_k,
             parallel_requests=self.run_config.parallel_requests,
             api_provider=self.run_config.api_provider,
             answering_model=self.run_config.answering_model,

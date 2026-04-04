@@ -5,6 +5,8 @@ import requests
 import src.prompts as prompts
 from concurrent.futures import ThreadPoolExecutor
 
+from src.retrieval_types import PublicRetrievalResult
+
 
 class JinaReranker:
     def __init__(self):
@@ -85,14 +87,20 @@ class LLMReranker:
       
         return response_dict
 
-    def rerank_documents(self, query: str, documents: list, documents_batch_size: int = 4, llm_weight: float = 0.7):
+    def rerank_documents(
+        self,
+        query: str,
+        documents: list[PublicRetrievalResult],
+        documents_batch_size: int = 4,
+        llm_weight: float = 0.7,
+    ) -> list[PublicRetrievalResult]:
         """
         Rerank multiple documents using parallel processing with threading.
-        Combines vector similarity and LLM relevance scores using weighted average.
+        Combines retrieval scores and LLM relevance scores using weighted average.
         """
         # Create batches of documents
         doc_batches = [documents[i:i + documents_batch_size] for i in range(0, len(documents), documents_batch_size)]
-        vector_weight = 1 - llm_weight
+        retrieval_weight = 1 - llm_weight
         
         if documents_batch_size == 1:
             def process_single_doc(doc):
@@ -101,10 +109,9 @@ class LLMReranker:
                 
                 doc_with_score = doc.copy()
                 doc_with_score["relevance_score"] = ranking["relevance_score"]
-                # Calculate combined score - note that distance is inverted since lower is better
                 doc_with_score["combined_score"] = round(
                     llm_weight * ranking["relevance_score"] + 
-                    vector_weight * doc['distance'],
+                    retrieval_weight * doc['retrieval_score'],
                     4
                 )
                 return doc_with_score
@@ -138,7 +145,7 @@ class LLMReranker:
                     doc_with_score["relevance_score"] = rank["relevance_score"]
                     doc_with_score["combined_score"] = round(
                         llm_weight * rank["relevance_score"] + 
-                        vector_weight * doc['distance'],
+                        retrieval_weight * doc['retrieval_score'],
                         4
                     )
                     results.append(doc_with_score)
