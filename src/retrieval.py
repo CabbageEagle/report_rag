@@ -5,10 +5,14 @@ import pickle
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, cast
 
-import faiss
 import numpy as np
 from dotenv import load_dotenv
 from openai import OpenAI
+
+try:
+    import faiss
+except ImportError:  # pragma: no cover - optional dependency for BM25-only runs
+    faiss = None
 
 from src.index_metadata import INDEX_VERSION, get_index_metadata_path
 from src.reranking import LLMReranker
@@ -73,6 +77,7 @@ class BM25Retriever:
     def __init__(self, bm25_db_dir: Path, documents_dir: Path):
         self.bm25_db_dir = bm25_db_dir
         self.documents_dir = documents_dir
+        self._warned_missing_metadata_files: set[str] = set()
 
     def _load_document_and_index(self, company_name: str) -> Tuple[Dict, object]:
         _, document = _load_document_by_company_name(self.documents_dir, company_name)
@@ -128,10 +133,12 @@ class BM25Retriever:
     def _warn_on_legacy_or_mismatched_metadata(self, index_path: Path):
         metadata_path = get_index_metadata_path(index_path)
         if not metadata_path.exists():
-            _log.warning(
-                "BM25 metadata file is missing for %s; treating it as a legacy index.",
-                index_path.name,
-            )
+            if index_path.name not in self._warned_missing_metadata_files:
+                _log.warning(
+                    "BM25 metadata file is missing for %s; treating it as a legacy index.",
+                    index_path.name,
+                )
+                self._warned_missing_metadata_files.add(index_path.name)
             return
 
         try:
@@ -154,6 +161,7 @@ class VectorRetriever:
     def __init__(self, vector_db_dir: Path, documents_dir: Path):
         self.vector_db_dir = vector_db_dir
         self.documents_dir = documents_dir
+        self._missing_metadata_files: list[str] = []
         self.all_dbs = self._load_dbs()
         self.llm = self._set_up_llm()
 
@@ -169,6 +177,10 @@ class VectorRetriever:
         return llm
 
     def _load_dbs(self):
+        if faiss is None:
+            raise ImportError(
+                "faiss is required for VectorRetriever. Install the project dependencies or use BM25Retriever."
+            )
         all_dbs = []
         all_documents_paths = list(self.documents_dir.glob("*.json"))
         vector_db_files = {db_path.stem: db_path for db_path in self.vector_db_dir.glob("*.faiss")}
@@ -203,15 +215,22 @@ class VectorRetriever:
                     "document": document,
                 }
             )
+
+        if self._missing_metadata_files:
+            sample_files = ", ".join(self._missing_metadata_files[:3])
+            suffix = "" if len(self._missing_metadata_files) <= 3 else ", ..."
+            _log.warning(
+                "Vector index metadata files are missing for %d indexes; treating them as legacy indexes. Examples: %s%s",
+                len(self._missing_metadata_files),
+                sample_files,
+                suffix,
+            )
         return all_dbs
 
     def _warn_on_legacy_or_mismatched_metadata(self, index_path: Path):
         metadata_path = get_index_metadata_path(index_path)
         if not metadata_path.exists():
-            _log.warning(
-                "Vector index metadata file is missing for %s; treating it as a legacy index.",
-                index_path.name,
-            )
+            self._missing_metadata_files.append(index_path.name)
             return
 
         try:
@@ -229,17 +248,17 @@ class VectorRetriever:
                 INDEX_VERSION,
             )
 
-    @staticmethod
-    def get_strings_cosine_similarity(str1, str2):
-        llm = VectorRetriever.set_up_llm()
-        embeddings = llm.embeddings.create(input=[str1, str2], model="text-embedding-3-large")
-        embedding1 = embeddings.data[0].embedding
-        embedding2 = embeddings.data[1].embedding
-        similarity_score = np.dot(embedding1, embedding2) / (
-            np.linalg.norm(embedding1) * np.linalg.norm(embedding2)
-        )
-        similarity_score = round(similarity_score, 4)
-        return similarity_score
+    # @staticmethod
+    # def get_strings_cosine_similarity(str1, str2):
+    #     llm = VectorRetriever.set_up_llm()
+    #     embeddings = llm.embeddings.create(input=[str1, str2], model="text-embedding-3-large")
+    #     embedding1 = embeddings.data[0].embedding
+    #     embedding2 = embeddings.data[1].embedding
+    #     similarity_score = np.dot(embedding1, embedding2) / (
+    #         np.linalg.norm(embedding1) * np.linalg.norm(embedding2)
+    #     )
+    #     similarity_score = round(similarity_score, 4)
+    #     return similarity_score
 
     def _get_target_report(self, company_name: str) -> Dict:
         for report in self.all_dbs:

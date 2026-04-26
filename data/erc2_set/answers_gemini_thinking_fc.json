@@ -1,0 +1,49 @@
+{
+  "answers": [
+    {
+      "question_text": "For Ziff Davis, Inc., what was the value of Cloud storage capacity (TB) at the end of the period listed in annual report? If data is not available, return 'N/A'.",
+      "kind": "number",
+      "value": "N/A",
+      "references": []
+    },
+    {
+      "question_text": "Did Liberty Broadband Corporation announce a share buyback plan in the annual report? If there is no mention, return False.",
+      "kind": "boolean",
+      "value": "N/A",
+      "references": []
+    },
+    {
+      "question_text": "What is the total number of employees let go by Pintec Technology Holdings Limited according to the annual report? If data is not available, return 'N/A'.",
+      "kind": "number",
+      "value": "N/A",
+      "references": []
+    },
+    {
+      "question_text": "Which leadership positions changed at Westwater Resources, Inc. in the reporting period? If data is not available, return 'N/A'. Give me the title of the position.",
+      "kind": "names",
+      "value": "N/A",
+      "references": []
+    },
+    {
+      "question_text": "Did Brave Bison Group plc mention any mergers or acquisitions in the annual report? If there is no mention, return False.",
+      "kind": "boolean",
+      "value": "N/A",
+      "references": []
+    },
+    {
+      "question_text": "According to the annual report, what is the Cash flow from operations (in USD) for Sonic Automotive, Inc.  (within the last period or at the end of the last period)? If data is not available, return 'N/A'.",
+      "kind": "number",
+      "value": "N/A",
+      "references": []
+    },
+    {
+      "question_text": "Did Poste Italiane announce any changes to its dividend policy in the annual report? If there is no mention, return False.",
+      "kind": "boolean",
+      "value": "N/A",
+      "references": []
+    }
+  ],
+  "team_email": "79250515615@yandex.com",
+  "submission_name": "Ilia Ris v.8",
+  "details": "Custom pdf parsing + Full Context + Router + SO CoT + SO reparser; llm = gemini-2.0-flash-thinking-exp-01-21"
+}

@@ -4,7 +4,6 @@ import pickle
 from pathlib import Path
 from typing import List, Union
 
-import faiss
 import numpy as np
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -13,6 +12,11 @@ from tenacity import retry, stop_after_attempt, wait_fixed
 from tqdm import tqdm
 
 from src.index_metadata import build_index_sidecar_metadata, get_index_metadata_path
+
+try:
+    import faiss
+except ImportError:  # pragma: no cover - optional dependency for BM25-only runs
+    faiss = None
 
 
 def _get_indexable_text(chunk: dict) -> str:
@@ -59,6 +63,10 @@ class BM25Ingestor:
 
 class VectorDBIngestor:
     def __init__(self):
+        if faiss is None:
+            raise ImportError(
+                "faiss is required for VectorDBIngestor. Install the project dependencies first."
+            )
         self.llm = self._set_up_llm()
 
     def _set_up_llm(self):

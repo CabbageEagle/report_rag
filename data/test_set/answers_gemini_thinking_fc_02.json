@@ -1,0 +1,129 @@
+{
+  "answers": [
+    {
+      "question_text": "Did Mercia Asset Management PLC mention any mergers or acquisitions in the annual report?",
+      "kind": "boolean",
+      "value": true,
+      "references": [
+        {
+          "pdf_sha1": "ac9aa244462c80705c3ff046542c02c459989742",
+          "page_index": 2
+        },
+        {
+          "pdf_sha1": "ac9aa244462c80705c3ff046542c02c459989742",
+          "page_index": 8
+        },
+        {
+          "pdf_sha1": "ac9aa244462c80705c3ff046542c02c459989742",
+          "page_index": 22
+        },
+        {
+          "pdf_sha1": "ac9aa244462c80705c3ff046542c02c459989742",
+          "page_index": 26
+        },
+        {
+          "pdf_sha1": "ac9aa244462c80705c3ff046542c02c459989742",
+          "page_index": 54
+        },
+        {
+          "pdf_sha1": "ac9aa244462c80705c3ff046542c02c459989742",
+          "page_index": 94
+        },
+        {
+          "pdf_sha1": "ac9aa244462c80705c3ff046542c02c459989742",
+          "page_index": 98
+        }
+      ],
+      "reasoning_process": "1. The question asks if Mercia Asset Management PLC mentioned any 'mergers or acquisitions' in the annual report.\n2. I need to scan the retrieved pages for the terms 'merger', 'acquisition', or 'M&A'.\n3. Page 3 mentions 'mergers and acquisitions ('M&A')' in the context of objectives to increase funds under management.\n4. Page 9 explicitly lists 'mergers and acquisitions ('M&A')' as a strategy to increase funds under management.\n5. Page 23 discusses the 'buy-out from DHL Parcel UK Ltd' of UK Mail Digital Ltd, which is an acquisition.\n6. Page 27 discusses 'management buyouts, acquisitions and refinancings' in the context of the Debt team's activities.\n7. Page 55 mentions the acquisition of Fluidly Ltd by OakNorth Bank.\n8. Page 95 and 99 mention the acquisition of the Northern VCT fund management business and Enterprise Ventures Group Limited.\n9. Since the report explicitly discusses M&A as a strategic objective and details specific acquisitions (e.g., Enterprise Ventures, VCT fund management business, and portfolio company activities), the answer is True."
+    },
+    {
+      "question_text": "According to the annual report, what is the Operating margin (%) for Tradition (within the last period or at the end of the last period)? If data is not available, return 'N/A'.",
+      "kind": "number",
+      "value": 12.7,
+      "references": [
+        {
+          "pdf_sha1": "2779336b845a41544348abb7b3e6e5bd2ff893a2",
+          "page_index": 3
+        },
+        {
+          "pdf_sha1": "2779336b845a41544348abb7b3e6e5bd2ff893a2",
+          "page_index": 44
+        }
+      ],
+      "reasoning_process": "1. **Metric Definition:** The question asks for the 'Operating margin (%)' for 'Tradition' for the last period (2022). Operating margin is a profitability ratio that measures the percentage of revenue remaining after operating expenses are deducted.\n2. **Context Examination:** Page 4 of the Chairman's Message states: 'Adjusted underlying operating profit was CHF 130.3m... with an operating margin of 12.7% and 10.5% respectively [for 2022 and 2021].' Page 45, in the 'Operating Review' table, explicitly lists 'Adjusted underlying operating margin in %' as 12.7% for 2022 and 10.5% for 2021. It also lists 'Adjusted operating margin in %' as 11.4% for 2022 and 9.9% for 2021, and 'Reported operating margin in %' as 9.9% for 2022 and 8.4% for 2021.\n3. **Metric Matching:** The question asks for 'the' Operating margin. Given the multiple variants (Adjusted underlying, Adjusted, and Reported), the most representative figure for the Group's operational performance as highlighted in the Management Report is the 'Adjusted underlying operating margin', which is 12.7% for 2022.\n4. **Value Extraction:** The context on page 4 and page 45 confirms the adjusted underlying operating margin for 2022 is 12.7%.\n5. **Confirmation:** The value 12.7 is clearly stated in the report for the 2022 period."
+    },
+    {
+      "question_text": "Did TSX_Y announce a share buyback plan in the annual report?",
+      "kind": "boolean",
+      "value": true,
+      "references": [
+        {
+          "pdf_sha1": "9d7a72445aba6860402c3acce75af02dc045f74d",
+          "page_index": 18
+        },
+        {
+          "pdf_sha1": "9d7a72445aba6860402c3acce75af02dc045f74d",
+          "page_index": 19
+        },
+        {
+          "pdf_sha1": "9d7a72445aba6860402c3acce75af02dc045f74d",
+          "page_index": 36
+        },
+        {
+          "pdf_sha1": "9d7a72445aba6860402c3acce75af02dc045f74d",
+          "page_index": 67
+        }
+      ],
+      "reasoning_process": "1. The question asks if 'TSX_Y' announced a share buyback plan in the annual report. \n2. The context identifies 'Yellow Pages Limited' as the company whose annual report is provided, and it notes that its common shares are listed on the Toronto Stock Exchange ('TSX') under the symbol 'Y' (page 40). Therefore, 'TSX_Y' refers to Yellow Pages Limited.\n3. I need to search the document for mentions of 'share buyback' or 'normal course issuer bid' (NCIB), which is the standard term used in Canadian corporate reporting for a share buyback program.\n4. Page 19 contains a section titled 'Share repurchases - NCIBs'. It states: 'On August 5, 2021, the Company announced a new NCIB commencing August 10, 2021 to purchase up to $16.0 million of the Company's outstanding shares for cancellation on or before August 9, 2022.'\n5. Additionally, page 20 describes a 'Share repurchase - Plan of Arrangement' where the Board approved a distribution of approximately $100.0 million by way of a share repurchase. \n6. Since the annual report explicitly details these share repurchase programs (NCIBs and the Plan of Arrangement), the answer to whether the company announced a share buyback plan is True."
+    },
+    {
+      "question_text": "What was the largest single spending of CrossFirst Bank on executive compensation in USD?",
+      "kind": "name",
+      "value": "N/A",
+      "references": []
+    },
+    {
+      "question_text": "Did Holley Inc. mention any mergers or acquisitions in the annual report?",
+      "kind": "boolean",
+      "value": true,
+      "references": [
+        {
+          "pdf_sha1": "194000c9109c6fa628f1fed33b44ae4c2b8365f4",
+          "page_index": 4
+        },
+        {
+          "pdf_sha1": "194000c9109c6fa628f1fed33b44ae4c2b8365f4",
+          "page_index": 5
+        },
+        {
+          "pdf_sha1": "194000c9109c6fa628f1fed33b44ae4c2b8365f4",
+          "page_index": 33
+        },
+        {
+          "pdf_sha1": "194000c9109c6fa628f1fed33b44ae4c2b8365f4",
+          "page_index": 62
+        },
+        {
+          "pdf_sha1": "194000c9109c6fa628f1fed33b44ae4c2b8365f4",
+          "page_index": 63
+        },
+        {
+          "pdf_sha1": "194000c9109c6fa628f1fed33b44ae4c2b8365f4",
+          "page_index": 64
+        },
+        {
+          "pdf_sha1": "194000c9109c6fa628f1fed33b44ae4c2b8365f4",
+          "page_index": 65
+        },
+        {
+          "pdf_sha1": "194000c9109c6fa628f1fed33b44ae4c2b8365f4",
+          "page_index": 66
+        }
+      ],
+      "reasoning_process": "1. The question asks whether Holley Inc. mentioned any mergers or acquisitions in its annual report. \n2. I need to review the provided text to identify references to 'merger', 'acquisition', or 'business combination'.\n3. Page 5 explicitly mentions: '...we have recently added to our brand lineup through a series of strategic acquisitions, including our 2022 acquisitions of substantially all the assets of John's Ind., Inc. ('John's'), Southern Kentucky Classics ('SKC'), and Vesta Motorsports USA, Inc., d.b.a. RaceQuip ('RaceQuip')...'\n4. Page 6 details the 'Business Combination' that occurred on July 16, 2021, involving Empower Ltd. and Holley Intermediate Holdings, Inc., which resulted in the formation of Holley Inc.\n5. Page 34 provides a specific section titled 'Acquisitions' which lists multiple acquisitions completed between 2020 and 2022, including Baer, Inc., Brothers Mail Order Industries, Inc., Advance Engine Management Inc., Simpson Performance Products, and Drake Automotive Group.\n6. Given that the report explicitly discusses these transactions in detail throughout the document, the answer to the question is clearly yes."
+    }
+  ],
+  "team_email": "79250515615@yandex.com",
+  "submission_name": "Ilia Ris v.8",
+  "details": "Custom pdf parsing + Full Context + Router + SO CoT + SO reparser; llm = gemini-3.1-flash-lite-preview"
+}

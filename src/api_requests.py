@@ -239,14 +239,25 @@ class BaseIBMAPIProcessor:
 class BaseGeminiProcessor:
     def __init__(self):
         self.llm = self._set_up_llm()
-        self.default_model = 'gemini-2.0-flash-001'
-        # self.default_model = "gemini-2.0-flash-thinking-exp-01-21",
+        self.default_model = "gemini-3.1-flash-lite-preview"
+        self.legacy_model_aliases = {
+            "gemini-2.0-flash-thinking-exp-01-21": "gemini-3.1-flash-lite-preview",
+            "gemini-2.0-flash-thinking-exp-1219": "gemini-3.1-flash-lite-preview",
+            "gemini-2.0-flash-thinking-exp": "gemini-3.1-flash-lite-preview",
+            "gemini-2.0-flash": "gemini-3.1-flash-lite-preview",
+            "gemini-2.0-flash-001": "gemini-3.1-flash-lite-preview",
+            "Gemini 3.1 Flash-Lite": "gemini-3.1-flash-lite-preview",
+        }
         
     def _set_up_llm(self):
         load_dotenv()
         api_key = os.getenv("GEMINI_API_KEY")
         genai.configure(api_key=api_key)
         return genai
+
+    def _resolve_model_name(self, model_name: str) -> str:
+        """Map legacy or invalid model aliases to supported Gemini model codes."""
+        return self.legacy_model_aliases.get(model_name, model_name)
 
     def list_available_models(self) -> None:
         """
@@ -304,7 +315,7 @@ class BaseGeminiProcessor:
         
         try:
             reparsed_response = self.send_message(
-                model="gemini-2.0-flash-001",
+                model="gemini-3.1-flash-lite-preview",
                 system_content=prompts.AnswerSchemaFixPrompt.system_prompt,
                 human_content=user_prompt,
                 is_structured=False
@@ -339,6 +350,8 @@ class BaseGeminiProcessor:
     ) -> Union[str, Dict, None]:
         if model is None:
             model = self.default_model
+        requested_model = model
+        model = self._resolve_model_name(model)
 
         generation_config = {"temperature": temperature}
         
@@ -364,7 +377,12 @@ class BaseGeminiProcessor:
             
             return response.text
         except Exception as e:
-            raise Exception(f"API request failed after retries: {str(e)}")
+            if requested_model != model:
+                raise Exception(
+                    f"API request failed after retries while using Gemini model alias "
+                    f"'{requested_model}' resolved to '{model}': {str(e)}"
+                )
+            raise Exception(f"API request failed after retries with Gemini model '{model}': {str(e)}")
 
 
 class APIProcessor:

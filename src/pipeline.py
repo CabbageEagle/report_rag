@@ -62,7 +62,7 @@ class RunConfig:
     submission_file: bool = True
     full_context: bool = False
     api_provider: str = "gemini"
-    answering_model: str = "gemini-2.0-flash-001" #or "gpt-4o-2024-08-06"
+    answering_model: str = "gemini-3.1-flash-lite-preview" #or "gpt-4o-2024-08-06"
     config_suffix: str = ""
 
 class Pipeline:
@@ -384,9 +384,9 @@ gemini_thinking_config = RunConfig(
     parallel_requests=1,
     full_context=True,
     submission_name="Ilia Ris v.8",
-    pipeline_details="Custom pdf parsing + Full Context + Router + SO CoT + SO reparser; llm = gemini-2.0-flash-thinking-exp-01-21",
+    pipeline_details="Custom pdf parsing + Full Context + Router + SO CoT + SO reparser; llm = gemini-3.1-flash-lite-preview",
     api_provider="gemini",
-    answering_model="gemini-2.0-flash-thinking-exp-01-21",
+    answering_model="gemini-3.1-flash-lite-preview",
     config_suffix="_gemini_thinking_fc"
 )
 
@@ -397,9 +397,9 @@ gemini_flash_config = RunConfig(
     parallel_requests=1,
     full_context=True,
     submission_name="Ilia Ris v.9",
-    pipeline_details="Custom pdf parsing + Full Context + Router + SO CoT + SO reparser; llm = gemini-2.0-flash",
+    pipeline_details="Custom pdf parsing + Full Context + Router + SO CoT + SO reparser; llm = gemini-3.1-flash-lite-preview",
     api_provider="gemini",
-    answering_model="gemini-2.0-flash",
+    answering_model="gemini-3.1-flash-lite-preview",
     config_suffix="_gemini_flash_fc"
 )
 
@@ -436,9 +436,9 @@ gemini_thinking_config_big_context = RunConfig(
     parallel_requests=1,
     top_n_retrieval=30,
     submission_name="Ilia Ris v.12",
-    pipeline_details="Custom pdf parsing + vDB + Router + Parent Document Retrieval + SO CoT; llm = gemini-2.0-flash-thinking-exp-01-21; top_n = 30;",
+    pipeline_details="Custom pdf parsing + vDB + Router + Parent Document Retrieval + SO CoT; llm = gemini-3.1-flash-lite-preview; top_n = 30;",
     api_provider="gemini",
-    answering_model="gemini-2.0-flash-thinking-exp-01-21",
+    answering_model="gemini-3.1-flash-lite-preview",
     config_suffix="_gemini_thinking_bc"
 )
 
